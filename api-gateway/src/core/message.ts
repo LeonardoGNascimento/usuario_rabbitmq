@@ -1,21 +1,10 @@
-import { Injectable } from '@nestjs/common';
 import {
   ClientProxy,
   ClientProxyFactory,
   Transport,
 } from '@nestjs/microservices';
-
-interface IMessage {
-  pattern: string;
-  body: any;
-  fila: string;
-  idUsuario: string;
-}
-
-interface ILog {
-  idUsuario: string;
-  body: any;
-}
+import { ILog } from './dominio/ILog.interface';
+import { IMessage } from './dominio/IMessage.interface';
 
 export class Message {
   client: ClientProxy;
@@ -42,6 +31,6 @@ export class Message {
         queue: fila,
       },
     });
-    return client.send(pattern, body);
+    client.emit(pattern, body);
   }
 }

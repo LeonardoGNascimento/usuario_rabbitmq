@@ -15,19 +15,9 @@ datasource db {
 }
 
 model usuario {
-  id         String       @unique @default(cuid())
-  nome       String
-  email      String       @unique
-  senha      String
-  cpf        Int          @unique
-  messageLog messageLog[]
-}
-
-model messageLog {
-  id        String   @unique @default(cuid())
-  dateTime  DateTime @default(now())
-  message   String
-  usuarioId String
-
-  usuario usuario @relation(fields: [usuarioId], references: [id])
+  id    String @unique @default(cuid())
+  nome  String
+  email String @unique
+  senha String
+  cpf   Int    @unique
 }

@@ -4,7 +4,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 interface IMessage {
   idUsuario: string;
-  message: object;
+  message: {
+    pattern: string;
+    fila: string;
+    body: object;
+  };
 }
 
 @Controller()
@@ -13,10 +17,13 @@ export class MessageController {
 
   @EventPattern('log-mensagem')
   async salvar(@Payload() { idUsuario, message }: IMessage) {
-    await this.prisma.messageLog.create({
+    await this.prisma.log.create({
       data: {
         usuarioId: idUsuario,
-        message: JSON.stringify(message),
+        message: JSON.stringify(message.body),
+        fila: message.fila,
+        pattern: message.pattern,
+        dateTime: new Date(),
       },
     });
   }

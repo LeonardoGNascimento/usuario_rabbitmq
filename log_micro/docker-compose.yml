@@ -1,0 +1,7 @@
+services:
+  nest:
+    build: .
+    container_name: log_micro
+    restart: always
+    volumes:
+      - ./:/log

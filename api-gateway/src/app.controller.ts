@@ -24,14 +24,14 @@ export class AppController {
   async listar() {
     var i = 0;
 
-    // while (i < 10) {
-    return Message.send({
-      pattern: 'listar-usuarios',
-      body: {},
-      fila: 'usuarios',
-      idUsuario: 'cla0eojjm0000uu2otp8pcq18',
-    });
-    //   i = i + 1;
-    // }
+    while (i < 1000) {
+      i = i + 1;
+      Message.send({
+        pattern: 'listar-usuarios',
+        body: {},
+        fila: 'usuarios',
+        idUsuario: 'cla0eojjm0000uu2otp8pcq18',
+      });
+    }
   }
 }
