@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { UsuarioController } from './aplicacao/controllers/usuario.controller';
 import { UsuarioService } from './aplicacao/services/usuario.service';
-import { Usuario } from './dominio/models/usuario.model';
 import { UsuarioRepository } from './infra/repository/mysql/usuario.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Usuario])],
   controllers: [UsuarioController],
-  providers: [UsuarioService, UsuarioRepository],
+  providers: [UsuarioService, UsuarioRepository, PrismaService],
   exports: [UsuarioService, UsuarioRepository],
 })
 export class UsuarioModule {}

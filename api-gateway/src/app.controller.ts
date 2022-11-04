@@ -4,22 +4,34 @@ import {
   ClientProxyFactory,
   Transport,
 } from '@nestjs/microservices';
-import { AppService } from './app.service';
+import { Message } from './core/message';
 
 @Controller()
 export class AppController {
-  private client: ClientProxy;
-  constructor(private readonly appService: AppService) {
+  client: ClientProxy;
+  clientLog: ClientProxy;
+  constructor() {
     this.client = ClientProxyFactory.create({
       transport: Transport.RMQ,
       options: {
-        urls: ['amqp://user:password@localhost:0000/'],
+        urls: ['amqp://admin:123456@localhost:5672'],
+        queue: 'usuarios',
       },
     });
   }
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  async listar() {
+    var i = 0;
+
+    // while (i < 10) {
+    return Message.send({
+      pattern: 'listar-usuarios',
+      body: {},
+      fila: 'usuarios',
+      idUsuario: 'cla0eojjm0000uu2otp8pcq18',
+    });
+    //   i = i + 1;
+    // }
   }
 }

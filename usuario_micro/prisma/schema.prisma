@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model usuario {
+  id         String       @unique @default(cuid())
+  nome       String
+  email      String       @unique
+  senha      String
+  cpf        Int          @unique
+  messageLog messageLog[]
+}
+
+model messageLog {
+  id        String   @unique @default(cuid())
+  dateTime  DateTime @default(now())
+  message   String
+  usuarioId String
+
+  usuario usuario @relation(fields: [usuarioId], references: [id])
+}

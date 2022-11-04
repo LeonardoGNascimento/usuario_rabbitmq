@@ -2,80 +2,66 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Usuario } from '../../dominio/models/usuario.model';
 import { UsuarioRepository } from '../../infra/repository/mysql/usuario.repository';
 import { RpcException } from '@nestjs/microservices';
-
-export class FitRpcException extends RpcException {
-  constructor(message: string, statusCode: HttpStatus) {
-    super(message);
-    this.initStatusCode(statusCode);
-  }
-  public status: number;
-
-  private initStatusCode(statusCode) {
-    this.status = statusCode;
-  }
-}
+import { RequestException } from 'src/common/core/exception';
 
 @Injectable()
 export class UsuarioService {
-  constructor(private readonly usuarioRepository: UsuarioRepository) {}
+  constructor(private usuarioRepository: UsuarioRepository) {}
 
-  public async login(usuario: Usuario) {
-    const resultado = await this.usuarioRepository.login(usuario);
+  // public async login(usuario: Usuario) {
+  //   const resultado = await this.usuarioRepository.login(usuario);
 
-    if (!resultado) {
-      throw new RpcException('Usuario não encontrado');
-    }
+  //   if (!resultado) {
+  //     throw new RpcException('Usuario não encontrado');
+  //   }
 
-    return resultado;
-  }
+  //   return resultado;
+  // }
 
-  public async cria(usuarioRequest: Usuario): Promise<Usuario> {
-    const verificarEmail = await this.usuarioRepository.buscarPorEmail(
-      usuarioRequest.email,
-    );
+  // public async cria(usuarioRequest: Usuario): Promise<Usuario> {
+  //   const verificarEmail = await this.usuarioRepository.buscarPorEmail(
+  //     usuarioRequest.email,
+  //   );
 
-    if (verificarEmail) {
-      throw new FitRpcException('Email já cadastrado', 400);
-    }
+  //   if (verificarEmail) {
+  //     throw new FitRpcException('Email já cadastrado', 400);
+  //   }
 
-    return await this.usuarioRepository.cadastrar(usuarioRequest);
-  }
+  //   return await this.usuarioRepository.cadastrar(usuarioRequest);
+  // }
 
-  public async buscar(id: number): Promise<Usuario> {
-    const usuario = await this.usuarioRepository.buscar(id);
+  // public async buscar(id: number): Promise<Usuario> {
+  //   const usuario = await this.usuarioRepository.buscar(id);
 
-    if (!usuario) {
-      throw new RpcException('Usuario não encontrado');
-    }
+  //   if (!usuario) {
+  //     throw new RpcException('Usuario não encontrado');
+  //   }
 
-    return usuario;
-  }
+  //   return usuario;
+  // }
 
-  public async listar(): Promise<Usuario[]> {
+  public async listar(): Promise<Usuario[] | RpcException> {
     const usuarios = await this.usuarioRepository.listar();
 
     if (!usuarios) {
-      throw new HttpException(
-        'Nenhum usuario encontrado',
-        HttpStatus.NOT_FOUND,
-      );
+      throw new RequestException('Nenhum usuário encontrado', 404);
     }
 
     return usuarios;
   }
 
-  public async excluir(id: number): Promise<void> {
-    await this.usuarioRepository.excluir(id);
-  }
+  // public async excluir(id: number): Promise<void> {
+  //   await this.usuarioRepository.excluir(id);
+  // }
 
-  public async atualizar(usuario: Usuario): Promise<Usuario> {
-    await this.buscar(usuario.id);
-    await this.usuarioRepository.atualizar(usuario);
+  // public async atualizar(usuario: Usuario): Promise<Usuario> {
+  //   await this.buscar(usuario.id);
+  //   await this.usuarioRepository.atualizar(usuario);
 
-    return usuario;
-  }
+  //   return usuario;
+  // }
 
-  public async buscarUsuarioEmail(email: string): Promise<Usuario> {
-    return await this.usuarioRepository.buscarPorEmail(email);
-  }
+  // public async buscarUsuarioEmail(email: string): Promise<Usuario> {
+  //   return await this.usuarioRepository.buscarPorEmail(email);
+  // }
 }

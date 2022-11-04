@@ -2,69 +2,68 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Usuario } from '../../../dominio/models/usuario.model';
 import { Repository } from 'typeorm';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UsuarioRepository {
-  constructor(
-    @InjectRepository(Usuario) private usuarioRepository: Repository<Usuario>,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
-  async cadastrar(usuario: Usuario): Promise<Usuario> {
-    return await this.usuarioRepository.save(usuario);
-  }
+  // async cadastrar(usuario: Usuario): Promise<Usuario> {
+  //   return await this.usuarioRepository.save(usuario);
+  // }
 
-  async buscarPorEmail(email: string): Promise<Usuario> {
-    const usuario = await this.usuarioRepository.findOneBy({ email: email });
+  // async buscarPorEmail(email: string): Promise<Usuario> {
+  //   const usuario = await this.usuarioRepository.findOneBy({ email: email });
 
-    if (!usuario) {
-      return null;
-    }
+  //   if (!usuario) {
+  //     return null;
+  //   }
 
-    return usuario;
-  }
+  //   return usuario;
+  // }
 
   async listar(): Promise<Usuario[]> {
-    const usuarios = await this.usuarioRepository.find();
+    const usuarios = await this.prisma.usuario.findMany();
 
-    if (!usuarios) {
+    if (usuarios.length <= 0) {
       return null;
     }
 
     return usuarios;
   }
 
-  async buscar(id: number): Promise<Usuario> {
-    const usuario = await this.usuarioRepository.findOneBy({ id: id });
+  // async buscar(id: number): Promise<Usuario> {
+  //   const usuario = await this.usuarioRepository.findOneBy({ id: id });
 
-    if (!usuario) {
-      return null;
-    }
+  //   if (!usuario) {
+  //     return null;
+  //   }
 
-    return usuario;
-  }
+  //   return usuario;
+  // }
 
-  async atualizar(usuario: Usuario) {
-    const resultado = await this.usuarioRepository.update(usuario.id, usuario);
+  // async atualizar(usuario: Usuario) {
+  //   const resultado = await this.usuarioRepository.update(usuario.id, usuario);
 
-    return resultado;
-  }
+  //   return resultado;
+  // }
 
-  async excluir(id: number) {
-    const resultado = await this.usuarioRepository.delete(id);
+  // async excluir(id: number) {
+  //   const resultado = await this.usuarioRepository.delete(id);
 
-    return resultado;
-  }
+  //   return resultado;
+  // }
 
-  async login(usuario: Usuario) {
-    const resultado = await this.usuarioRepository.findOneBy({
-      email: usuario.email,
-      senha: usuario.senha,
-    });
+  // async login(usuario: Usuario) {
+  //   const resultado = await this.usuarioRepository.findOneBy({
+  //     email: usuario.email,
+  //     senha: usuario.senha,
+  //   });
 
-    if (!resultado) {
-      return null;
-    }
+  //   if (!resultado) {
+  //     return null;
+  //   }
 
-    return resultado;
-  }
+  //   return resultado;
+  // }
 }

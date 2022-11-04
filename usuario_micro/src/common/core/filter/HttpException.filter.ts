@@ -1,33 +1,12 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
-import { HttpAdapterHost } from '@nestjs/core';
+import { Catch, RpcExceptionFilter, ArgumentsHost } from '@nestjs/common';
+import { Observable, throwError } from 'rxjs';
+import { RequestException } from '../exception';
 
-@Catch()
-export class HttpExceptionFilter implements ExceptionFilter {
-  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
-
-  catch(exception: unknown, host: ArgumentsHost) {
-    const ctx = host.switchToHttp();
-    const response = ctx.getResponse();
-    const request = ctx.getRequest();
-
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
-
-    const message =
-      exception instanceof HttpException ? exception.getResponse() : exception;
-    
-    response.status(status).json({
-      timestamp: new Date().toISOString(),
-      path: request.url,
-      error: message,
-    });
+@Catch(RequestException)
+export class RequestExceptionFilter
+  implements RpcExceptionFilter<RequestException>
+{
+  catch(exception: RequestException, host: ArgumentsHost): Observable<any> {
+    return throwError(() => exception.body);
   }
 }
