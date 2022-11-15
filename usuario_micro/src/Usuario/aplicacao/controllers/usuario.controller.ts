@@ -14,16 +14,15 @@ import { RequestExceptionFilter } from 'src/common/core/filter/HttpException.fil
 export class UsuarioController {
   constructor(private usuarioService: UsuarioService) {}
 
-  // @EventPattern('criar-usuario')
-  // async cria(@Payload() usuario: Usuario): Promise<Usuario> {
-  //   return await this.usuarioService.cria(usuario);
-  // }
+  @EventPattern('cadastrar-usuario')
+  async cria(@Payload() usuario: Usuario): Promise<Usuario> {
+    return await this.usuarioService.cria(usuario);
+  }
 
   @MessagePattern('listar-usuarios')
   async listar(): Promise<Usuario[] | RpcException> {
     return await this.usuarioService.listar();
   }
-
   // @MessagePattern('atualizar-usuario')
   // async atualizar(@Payload() usuario: Usuario): Promise<Usuario> {
   //   return await this.usuarioService.atualizar(usuario);

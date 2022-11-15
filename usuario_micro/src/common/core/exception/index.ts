@@ -1,9 +1,10 @@
+import { HttpStatus } from '@nestjs/common';
+
 export class RequestException {
   public body: object;
-  constructor(public message: string, public status: number) {
+  constructor(public message: string, public statusCode: number) {
     this.body = {
-      message,
-      status,
+      response: { message, statusCode, error: HttpStatus[statusCode] },
     };
   }
 }

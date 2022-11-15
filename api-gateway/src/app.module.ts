@@ -1,19 +1,17 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { Message } from './core/message';
-import { RequestFilter } from './filter/Request.filter';
+import { RequestFilter } from './core/filter/Request.filter';
+import { UsuarioModule } from './usuario/usuario.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
+  imports: [UsuarioModule],
+  controllers: [],
   providers: [
     {
       provide: APP_FILTER,
       useClass: RequestFilter,
     },
-    AppService,
     Message,
   ],
 })

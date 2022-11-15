@@ -18,17 +18,25 @@ export class UsuarioService {
   //   return resultado;
   // }
 
-  // public async cria(usuarioRequest: Usuario): Promise<Usuario> {
-  //   const verificarEmail = await this.usuarioRepository.buscarPorEmail(
-  //     usuarioRequest.email,
-  //   );
+  public async cria(usuarioRequest: Usuario): Promise<Usuario> {
+    const verificarEmail = await this.usuarioRepository.buscarPorEmail(
+      usuarioRequest.email,
+    );
 
-  //   if (verificarEmail) {
-  //     throw new FitRpcException('Email já cadastrado', 400);
-  //   }
+    if (verificarEmail) {
+      throw new RequestException('Email já cadastrado', 400);
+    }
 
-  //   return await this.usuarioRepository.cadastrar(usuarioRequest);
-  // }
+    const verificarCpf = await this.usuarioRepository.buscarPorCpf(
+      usuarioRequest.cpf,
+    );
+
+    if (verificarCpf) {
+      throw new RequestException('CPF já cadastrado', 400);
+    }
+
+    return await this.usuarioRepository.cria(usuarioRequest);
+  }
 
   // public async buscar(id: number): Promise<Usuario> {
   //   const usuario = await this.usuarioRepository.buscar(id);
@@ -61,7 +69,7 @@ export class UsuarioService {
   //   return usuario;
   // }
 
-  // public async buscarUsuarioEmail(email: string): Promise<Usuario> {
-  //   return await this.usuarioRepository.buscarPorEmail(email);
-  // }
+  public async buscarEmail(email: string): Promise<Usuario> {
+    return await this.usuarioRepository.buscarPorEmail(email);
+  }
 }

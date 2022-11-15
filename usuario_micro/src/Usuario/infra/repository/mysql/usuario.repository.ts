@@ -1,26 +1,44 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Usuario } from '../../../dominio/models/usuario.model';
-import { Repository } from 'typeorm';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UsuarioRepository {
   constructor(private prisma: PrismaService) {}
 
-  // async cadastrar(usuario: Usuario): Promise<Usuario> {
-  //   return await this.usuarioRepository.save(usuario);
-  // }
+  async cria(usuario: Usuario): Promise<Usuario> {
+    return await this.prisma.usuario.create({
+      data: usuario,
+    });
+  }
 
-  // async buscarPorEmail(email: string): Promise<Usuario> {
-  //   const usuario = await this.usuarioRepository.findOneBy({ email: email });
+  async buscarPorEmail(email: string): Promise<Usuario> {
+    const usuario = await this.prisma.usuario.findFirst({
+      where: {
+        email,
+      },
+    });
 
-  //   if (!usuario) {
-  //     return null;
-  //   }
+    if (!usuario) {
+      return null;
+    }
 
-  //   return usuario;
-  // }
+    return usuario;
+  }
+
+  async buscarPorCpf(cpf: number): Promise<Usuario> {
+    const usuario = await this.prisma.usuario.findFirst({
+      where: {
+        cpf,
+      },
+    });
+
+    if (!usuario) {
+      return null;
+    }
+
+    return usuario;
+  }
 
   async listar(): Promise<Usuario[]> {
     const usuarios = await this.prisma.usuario.findMany();
